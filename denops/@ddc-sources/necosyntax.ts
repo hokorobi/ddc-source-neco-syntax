@@ -3,14 +3,20 @@ import {
   DdcOptions,
   Item,
   SourceOptions,
-} from "https://deno.land/x/ddc_vim@v3.2.0/types.ts";
+} from "https://deno.land/x/ddc_vim@v3.4.0/types.ts";
 import {
   Denops,
-} from "https://deno.land/x/ddc_vim@v3.2.0/deps.ts";
+} from "https://deno.land/x/ddc_vim@v3.4.0/deps.ts";
 
 type Params = Record<never, never>;
 
 export class Source extends BaseSource<Params> {
+  override async onInit(args: {
+    denops: Denops;
+  }): Promise<void> {
+    await args.denops.call('necosyntax#initialize');
+  }
+
   override async gather(args: {
     denops: Denops;
     options: DdcOptions;
