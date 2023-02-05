@@ -9,17 +9,20 @@ import {
 type Params = Record<never, never>;
 
 export class Source extends BaseSource<Params> {
+  _cache: Item[];
+
   override async onInit(args: {
     denops: Denops;
   }): Promise<void> {
     await args.denops.call('necosyntax#initialize');
+    const words =  await args.denops.call('necosyntax#gather_candidates') as string[];
+    this._cache = words.map((word) => ({word})) as Item[];
   }
 
   override async gather(args: {
     denops: Denops;
   }): Promise<Item[]> {
-    const words =  await args.denops.call('necosyntax#gather_candidates') as string[];
-    return words.map((word) => ({word})) as Item[];
+    return this._cache;
   }
 
   override params(): Params {
